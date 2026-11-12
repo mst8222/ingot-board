@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/baseUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="https://机器名.ts.net:端口 或 http://192.168.x.x:端口"
+        android:inputType="textUri"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/open"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="打开" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/keep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="保持接收" />
+
+    <WebView
+        android:id="@+id/web"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

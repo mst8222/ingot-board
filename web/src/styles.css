@@ -1,0 +1,191 @@
+@import 'tailwindcss';
+
+/*
+ * 设计 token。
+ *
+ * 用 CSS 变量而不是 Tailwind 任意值（bg-[#1a1a1a]）的原因：
+ * 暗色模式要有第二套色值，任意值写不出来，只能靠 .dark 覆盖，
+ * 覆盖一多就散了。变量把"语义"（surface/ink/muted）绑到具体颜色，
+ * 换主题只改变量。
+ *
+ * 对比度：ink/ink-muted 在两套主题下对 surface 的对比度都 ≥ 4.5:1
+ * （WCAG AA 正文标准），muted 用于次要文字同样达标。
+ */
+
+@theme {
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+}
+
+:root {
+  /* 表面层级：越靠前的元素越"浮" */
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f6f7f9;
+  --surface-hover: #f1f3f5;
+
+  --border: #e3e6ea;
+  --border-strong: #cdd2d9;
+
+  --ink: #16191d;
+  --ink-muted: #5b6570;
+  --ink-subtle: #8b949e;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #eff4ff;
+  --accent-ink: #ffffff;
+
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --success: #16a34a;
+  --success-soft: #f0fdf4;
+  --warning: #d97706;
+  --warning-soft: #fffbeb;
+
+  /* 状态色：看板列头、任务标签共用一套 */
+  --status-idea: #64748b;
+  --status-todo: #2563eb;
+  --status-doing: #d97706;
+  --status-review: #7c3aed;
+  --status-approved: #16a34a;
+
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.06), 0 1px 3px rgb(16 24 40 / 0.1);
+  --shadow-pop: 0 8px 24px rgb(16 24 40 / 0.12), 0 2px 6px rgb(16 24 40 / 0.08);
+}
+
+.dark {
+  --surface: #16181c;
+  --surface-raised: #1e2126;
+  --surface-sunken: #111316;
+  --surface-hover: #262a30;
+
+  --border: #2b3038;
+  --border-strong: #3d444e;
+
+  --ink: #e8eaed;
+  --ink-muted: #9aa4b0;
+  --ink-subtle: #6b7480;
+
+  --accent: #5b8def;
+  --accent-hover: #7aa5f5;
+  --accent-soft: #1b2537;
+  --accent-ink: #0b0d10;
+
+  --danger: #f26d6d;
+  --danger-soft: #2a1719;
+  --success: #4ade80;
+  --success-soft: #12251a;
+  --warning: #fbbf24;
+  --warning-soft: #2a2113;
+
+  --status-idea: #94a3b8;
+  --status-todo: #5b8def;
+  --status-doing: #fbbf24;
+  --status-review: #a78bfa;
+  --status-approved: #4ade80;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 1px 3px rgb(0 0 0 / 0.3);
+  --shadow-pop: 0 8px 24px rgb(0 0 0 / 0.5), 0 2px 6px rgb(0 0 0 / 0.4);
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background: var(--surface-sunken);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* 移动端：去掉双击缩放的 300ms 延迟，保留捏合缩放（无障碍要求） */
+    touch-action: manipulation;
+  }
+
+  /* 焦点样式只在键盘操作时出现。
+     原前端写成了 focus:outline-none，键盘用户完全失去焦点指示 —— 明确的 a11y 缺陷。 */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* 尊重系统的减少动效偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .surface {
+    background: var(--surface);
+  }
+
+  .surface-raised {
+    background: var(--surface-raised);
+  }
+
+  .surface-sunken {
+    background: var(--surface-sunken);
+  }
+
+  .ink {
+    color: var(--ink);
+  }
+
+  .ink-muted {
+    color: var(--ink-muted);
+  }
+
+  .ink-subtle {
+    color: var(--ink-subtle);
+  }
+
+  .border-token {
+    border-color: var(--border);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-pop {
+    box-shadow: var(--shadow-pop);
+  }
+
+  /* 拖拽中的卡片：轻微抬起 + 倾斜，给出"被拿起来了"的物理反馈 */
+  .dragging {
+    box-shadow: var(--shadow-pop);
+    transform: rotate(1.5deg);
+    opacity: 0.92;
+    /* 提升为独立层，避免被相邻卡片裁切 */
+    z-index: 40;
+  }
+
+  /* 列内落点提示线 */
+  .drop-indicator {
+    background: var(--accent);
+    border-radius: 9999px;
+    height: 2px;
+    margin: 2px 0;
+  }
+}
+
+/* 滚动条：桌面端细一点，不抢视觉 */
+@supports (scrollbar-width: thin) {
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+}
