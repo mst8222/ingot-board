@@ -9,6 +9,7 @@
 面向本机多个 AI Agent 编辑器（opencode、Cursor、WorkBuddy、Trae、Pi Agent、Qoder、Deepseek Harness 等）的任务看板。人类在看板上整理与派发任务，Agent 通过 MCP / Runner / REST 三种通道之一扫描并领取属于自己的任务，完成后提交等待人类评审。
 
 <p>
+  <a href="#-界面预览">界面预览</a> •
   <a href="#-项目简介">项目简介</a> •
   <a href="#-功能能力">功能能力</a> •
   <a href="#-快速开始">快速开始</a> •
@@ -20,6 +21,24 @@
 </p>
 
 </div>
+
+---
+
+## 📸 界面预览
+
+> 以下截图来自 **v1.0.0 源码编译出的服务二进制实际运行**（示例任务数据），未做后期合成。
+
+**看板总览**：五列任务流、项目色标、执行端指派与租约倒计时。
+
+![Ingot Board 看板总览](assets/screenshots/01-board-overview.png)
+
+| 任务详情与人类评审 | Agent 管理与额度 / 总管派发 |
+| --- | --- |
+| ![任务详情抽屉](assets/screenshots/02-task-detail.png) | ![Agent 管理面板](assets/screenshots/03-agent-panel.png) |
+
+**手机窄屏**：底栏切换，只下达任务与查看进度，执行仍留在本机 Agent。
+
+<img src="assets/screenshots/04-mobile.png" width="300" alt="手机窄屏界面" />
 
 ---
 
